@@ -35,69 +35,131 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'static_pages_no_templates',
+    'static_pages_1',
 ]
 
 ```
 
 config/urls.py
 ```Python
-from django.contrib import admin
 from django.urls import path
-from static_pages_no_templates import views
+from static_pages_1 import views
 
 urlpatterns = [
-    path('', views.home, name="home"),
-    path('contact/', views.contact, name="contact"),
+    path('', views.home),
+    path('contact/', views.contact),
+    path('about/', views.about),
+    path('store/', views.store),
 ]
 
 ```
 
 
-static_pages_no_templates/views.py
+static_pages_1/views.py
 ```Python
-from django.shortcuts import render
 from django.http import HttpResponse
 
 nav = """
-    <nav>
-        <a href='/'>Home</a> |
-        <a href='contact/'>Contact</a>
-    </nav>
+<nav>
+    <a href='/'>Home</a> |
+    <a href='/contact/'>Contact</a> |
+    <a href='/about/'>About Us</a> |
+    <a href='/store/'>Store</a>
+</nav>
 """
-name = "Tim"
-age = 24
-gains = 234.5634224
 
-home_body = f"""
+
+nickname = "Balakudra"  
+level = 79.5             
+kills = 4232          
+
+top_players = ["Alex", 120, 99.5, True, None, {"rank": "A+"}]
+
+
+server_info = {
+    "name": "Game-Server x10 low state",
+    "year": 2019,
+    "online": 1500,
+    "anti_cheat": True,
+    "region": "EU"
+}
+
+
+def render_variables():
+    return f"""
+    <h2>Player Info</h2>
     <ol>
-        <li>Name: {name}</li>
-        <li>Age: {age}</li>
-        <li>Gains: {gains:.2f}</li>
+        <li>Nickname: {nickname}</li>
+        <li>Level: {level}</li>
+        <li>Kills: {kills:.2f}</li>
     </ol>
-    
-"""
+    """
 
+def render_list():
+    items = "".join([f"<li>{i}</li>" for i in top_players])
+    return f"""
+    <h2>Top Players (List)</h2>
+    <ul>
+        {items}
+    </ul>
+    """
 
+def render_dict():
+    items = "".join([f"<li>{k}: {v}</li>" for k, v in server_info.items()])
+    return f"""
+    <h2>Server Info (Dict)</h2>
+    <ul>
+        {items}
+    </ul>
+    """
 
 def home(request):
-    content= """
-            <h1>Welcome to my Page</h1>
-            <h2>Visit around</h2>
-            <p>Enjoy the content</p>
+    content = """
+    <h1>Welcome to Game-Server x10 low state</h1>
+    <h2>Main Menu</h2>
+    <p>Top gamers section</p>
     """
-    
-    return HttpResponse(nav + content + home_body)
+    return HttpResponse(nav + content + render_variables() + render_list())
+
 
 def contact(request):
-    return HttpResponse(nav + "Contact Us")
+    content = """
+    <h1>Contact</h1>
+    <h2>Social Media</h2>
+    <p>LinkedIn / Facebook / Instagram</p>
+    """
+    return HttpResponse(nav + content + render_variables())
 
+
+def about(request):
+    content = """
+    <h1>About</h1>
+    <h2>Server History</h2>
+    <p>Started in 2019, stable gameplay, anti-cheat system active.</p>
+    """
+    return HttpResponse(nav + content + render_dict())
+
+
+def store(request):
+    content = """
+    <h1>Store</h1>
+    <h2>Donate Shop</h2>
+    <p>Exchange system and premium items</p>
+    """
+    return HttpResponse(nav + content)
 ```
 
 ### Rendering
+## Screenshots
 
-Home page
-![Home Page](home.png)
+### Home Page
+![home](pictures/home.png)
 
-Contact Page
-![Contact Page](contact.png)
+### Contact Page
+![contact](pictures/contact.png)
+
+### About Page
+![about](pictures/about.png)
+
+### Store Page
+![store](pictures/store.png)
